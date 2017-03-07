@@ -1,0 +1,191 @@
+<div id='divatas' style='overflow-y:auto;'>
+	<form method='post' url="" id="form_{$main}_{$acak}" enctype="multipart/form-data">			
+		<table cellspacing="1" cellpadding="0" border="0" style="width:100%; border: 1px solid #4C4747;">
+			<tr style='background:#7DB3CB; color:#fff; font-weight:bold;'>
+				<td align='center' width='30%'>Modul</td>
+				<td align='center'>Create</td>
+				<td align='center'>Read</td>
+				<td align='center'>Update</td>
+				<td align='center'>Delete</td>
+				<td align='center'>Sharing File</td>
+				<td align='center'>Download File</td>
+			</tr>
+			
+			{foreach from=$role item=rows}
+				{if $rows.buat eq 1}
+					{assign var=stsbuat value='checked'}
+				{elseif $rows.buat eq 0}
+					{assign var=stsbuat value=''}
+				{/if}
+				{if $rows.baca eq 1}
+					{assign var=stsbaca value='checked'}
+				{elseif $rows.baca eq 0}
+					{assign var=stsbaca value=''}
+				{/if}
+				{if $rows.ubah eq 1}
+					{assign var=stsubah value='checked'}
+				{elseif $rows.ubah eq 0}
+					{assign var=stsubah value=''}
+				{/if}
+				{if $rows.hapus eq 1}
+					{assign var=stshapus value='checked'}
+				{elseif $rows.hapus eq 0}
+					{assign var=stshapus value=''}
+				{/if}
+				
+				{if $rows.sharing_file eq 1}
+					{assign var=stssharing value='checked'}
+				{elseif $rows.sharing_file eq 0}
+					{assign var=stssharing value=''}
+				{/if}
+				{if $rows.download_file eq 1}
+					{assign var=stsdownload value='checked'}
+				{elseif $rows.download_file eq 0}
+					{assign var=stsdownload value=''}
+				{/if}
+				
+				<tr style='background:#F2F2F2; color:#333333; font-weight:bold;'>
+					<td style='padding-left:5px;'>{$rows.nama_menu}</td>
+					<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkbuat[]" style='opacity:1 !important; position:unset !important;' data="C_{$rows.id}" {$stsbuat}></td>
+					<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkbaca[]" style='opacity:1 !important; position:unset !important;'  data="R_{$rows.id}" {$stsbaca} ></td>
+					<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkubah[]" style='opacity:1 !important; position:unset !important;' data="U_{$rows.id}" {$stsubah} ></td>
+					<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkhapus[]" style='opacity:1 !important; position:unset !important;' data="D_{$rows.id}" {$stshapus} ></td>
+					<td align='center'><input type="checkbox" class='cek_{$acak}' name="checksharing_file[]" style='opacity:1 !important; position:unset !important;' data="SH_{$rows.id}" {$stssharing} ></td>
+					<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkdownload_file[]" style='opacity:1 !important; position:unset !important;' data="DW_{$rows.id}" {$stsdownload} ></td>
+				</tr>
+				{foreach from=$rows.child_menu item=riws}
+					{if $riws.buat eq 1}
+						{assign var=stsbuatChild value='checked'}
+					{elseif $riws.buat eq 0}
+						{assign var=stsbuatChild value=''}
+					{/if}
+					{if $riws.baca eq 1}
+						{assign var=stsbacaChild value='checked'}
+					{elseif $riws.baca eq 0}
+						{assign var=stsbacaChild value=''}
+					{/if}
+					{if $riws.ubah eq 1}
+						{assign var=stsubahChild value='checked'}
+					{elseif $riws.ubah eq 0}
+						{assign var=stsubahChild value=''}
+					{/if}
+					{if $riws.hapus eq 1}
+						{assign var=stshapusChild value='checked'}
+					{elseif $riws.hapus eq 0}
+						{assign var=stshapusChild value=''}
+					{/if}
+					
+					{if $riws.sharing_file eq 1}
+						{assign var=stssharingChild value='checked'}
+					{elseif $riws.sharing_file eq 0}
+						{assign var=stssharingChild value=''}
+					{/if}
+					{if $riws.download_file eq 1}
+						{assign var=stsdownloadChild value='checked'}
+					{elseif $riws.download_file eq 0}
+						{assign var=stsdownloadChild value=''}
+					{/if}
+				
+					<tr style='background:#F2F2F2; color:#333333;'>
+						<td style='padding-left:15px;'>- {$riws.nama_menu_child}</td>
+						<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkbuat[]" style='opacity:1 !important; position:unset !important;' data="C_{$riws.id_child}" {$stsbuatChild}></td>
+						<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkbaca[]" style='opacity:1 !important; position:unset !important;' data="R_{$riws.id_child}"{$stsbacaChild} ></td>
+						<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkubah[]" style='opacity:1 !important; position:unset !important;' data="U_{$riws.id_child}"{$stsubahChild} ></td>
+						<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkhapus[]" style='opacity:1 !important; position:unset !important;' data="D_{$riws.id_child}" {$stshapusChild} ></td>
+						<td align='center'><input type="checkbox" class='cek_{$acak}' name="checksharing_file[]" style='opacity:1 !important; position:unset !important;' data="SH_{$riws.id_child}" {$stssharingChild} ></td>
+						<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkdownload_file[]" style='opacity:1 !important; position:unset !important;' data="DW_{$riws.id_child}" {$stsdownloadChild} ></td>
+					</tr>
+					
+					{if isset($riws.sub_child_menu) }
+						{foreach from=$riws.sub_child_menu item=ruws}
+							{if $ruws.buat eq 1}
+								{assign var=stsbuatSubChild value='checked'}
+							{elseif $ruws.buat eq 0}
+								{assign var=stsbuatSubChild value=''}
+							{/if}
+							{if $ruws.baca eq 1}
+								{assign var=stsbacaSubChild value='checked'}
+							{elseif $ruws.baca eq 0}
+								{assign var=stsbacaSubChild value=''}
+							{/if}
+							{if $ruws.ubah eq 1}
+								{assign var=stsubahSubChild value='checked'}
+							{elseif $ruws.ubah eq 0}
+								{assign var=stsubahSubChild value=''}
+							{/if}
+							{if $ruws.hapus eq 1}
+								{assign var=stshapusSubChild value='checked'}
+							{elseif $ruws.hapus eq 0}
+								{assign var=stshapusSubChild value=''}
+							{/if}
+							
+							{if $ruws.sharing_file eq 1}
+								{assign var=stssharingSubChild value='checked'}
+							{elseif $ruws.sharing_file eq 0}
+								{assign var=stssharingSubChild value=''}
+							{/if}
+							{if $ruws.download_file eq 1}
+								{assign var=stsdownloadSubChild value='checked'}
+							{elseif $ruws.download_file eq 0}
+								{assign var=stsdownloadSubChild value=''}
+							{/if}
+							
+							<tr style='background:#EAEAEA; color:#333333;'>
+								<td style='padding-left:20px;'>+ {$ruws.nama_menu_sub_child}</td>
+								<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkbuat[]" style='opacity:1 !important; position:unset !important;' data="C_{$ruws.id_sub_child}" {$stsbuatSubChild}></td>
+								<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkbaca[]" style='opacity:1 !important; position:unset !important;' data="R_{$ruws.id_sub_child}"{$stsbacaSubChild} ></td>
+								<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkubah[]" style='opacity:1 !important; position:unset !important;' data="U_{$ruws.id_sub_child}"{$stsubahSubChild} ></td>
+								<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkhapus[]" style='opacity:1 !important; position:unset !important;' data="D_{$ruws.id_sub_child}" {$stshapusSubChild} ></td>
+								<td align='center'><input type="checkbox" class='cek_{$acak}' name="checksharing_file[]" style='opacity:1 !important; position:unset !important;' data="SH_{$ruws.id_sub_child}" {$stssharingSubChild} ></td>
+								<td align='center'><input type="checkbox" class='cek_{$acak}' name="checkdownload_file[]" style='opacity:1 !important; position:unset !important;' data="DW_{$ruws.id_sub_child}" {$stsdownloadSubChild} ></td>
+							</tr>
+						{/foreach}
+					{/if}
+					
+				{/foreach}
+			{/foreach}
+				
+		</table>
+	</form>
+</div>
+
+<div style='margin-top:10px;'>
+    <a class="btn btn-primary" id='simpan_{$acak}' >Save</a>
+    <a class="btn btn-danger" id='cancel_{$acak}'>Cancel</a>
+    <a class="btn btn-info" style='float:right;' id='selectall_{$acak}'>Select All</a>
+    {* <a class="btn btn-warning" style='float:right;margin-right:5px;' id='unselectall_{$acak}'>UnSelect All</a> *}
+</div>
+
+<script>
+	$('#divatas').css({ 'height':getClientHeight()-280 });
+	$('#simpan_{$acak}').on('click',function(e){
+		//loadingna();
+		var pecah={};
+		$('.cek_{$acak}:checkbox:checked').each(function(i) { 
+			pecah[i]=$(this).attr("data");
+		});
+		$.post(host+'backoffice-simpan/user_role_group',{ data:pecah, 'id':'{$id_group|default:''}', 'editstatus':'add_role' } ,function(r){
+			if(r==1){
+				$.messager.alert('PGN Solution', "Data Saved", 'info');
+			}else{
+				$.messager.alert('PGN Solution', "Data Not Saved", 'error');
+			}
+			
+			closeWindow();
+			//$('#grid_').datagrid('reload');
+		});
+		
+		//winLoadingClose();
+		return false;
+	});
+	$('#cancel_{$acak}').on('click',function(e){
+		closeWindow();
+	});
+	
+	$('#selectall_{$acak}').on('click',function(e){
+		$(".cek_{$acak}").attr('checked', true );
+	});
+	$('#unselectall_{$acak}').on('click',function(e){
+		$(".cek_{$acak}").attr('checked', false );
+	});
+</script>

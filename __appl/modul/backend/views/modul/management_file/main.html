@@ -1,0 +1,26 @@
+<div id="panel_{$main}" style="padding:5px;">
+	<div id="tab_{$main}"></div>
+</div>
+<script>
+	var auth_sharing_file = "{$auth_sharing.sharing_file|default:''}";
+	
+	$('#panel_{$main}').css('height', (getClientHeight()-115) );
+	if(grp == 4){
+		var tab_array=[
+			"Main Data", "Advanced Search", "Data Sharing"
+		];
+	}else if(grp == 3){
+		var tab_array=[
+			"Main Data", "Advanced Search"
+		];
+	}else if(grp == 2){
+		var tab_array=[
+			"Main Data", "Advanced Search", "Request Delete", "Data Sharing"
+		];
+	}else if(grp == 1){
+		var tab_array=[
+			"Main Data", "Advanced Search"
+		];
+	}
+	genTab( '#tab_{$main}', '{$main}', tab_array );
+</script>

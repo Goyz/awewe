@@ -1,0 +1,66 @@
+<div class="page-header position-relative">
+	<h1>
+		USER MANAGEMENT
+	</h1>
+</div>
+<div class="row-fluid">
+	<div class="span12">
+		<form class="form-horizontal" id='Form_{$acak}' name='frmMngFile' url="{$host}backoffice-simpan/cl_group_user" enctype="multipart/form-data" method="post">
+			<input type='hidden' name="editstatus" value="{$sts}" />
+			<input type='hidden' name="id" value="{$data.id|default:''}" />
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Group User</label>
+				<div class="controls">
+					<input  id="group_user" name="group_user" value="{$data.group_user|default:''}" class="span6 validasi" type="text" />
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Keterangan</label>
+				<div class="controls">
+					<textarea name="keterangan" id="keterangan" class="span12">{$data.keterangan|default:''}</textarea>
+				</div>
+			</div>
+			
+		</form>
+		<div class="form-actions">
+			<a class="btn btn-info" href='javascript:void(0);' id='simpan_{$acak}'>
+				Simpan
+			</a>
+			&nbsp; &nbsp; &nbsp;
+			<a class="btn btn-danger" href='javascript:void(0);' id='cancel_{$acak}'>
+				Kembali
+			</a>
+		</div>
+	</div>
+</div>
+<script>
+	
+	$(".validasi").validatebox({ required:true }); 		
+	
+	$('#cancel_{$acak}').on('click', function(){
+		$('#detil_nya_{$mod}').html('');
+		$('#grid_nya_{$mod}').show();
+		$('#detilnya_nya_{$mod}').hide();
+	});
+	$('#simpan_{$acak}').on('click', function(){
+		validasi = $('#Form_{$acak}').form('validate');
+		submit_form('Form_{$acak}',function(r){
+			if(r == 1){
+				$.messager.alert('PGN Solution', "Data Tersimpan", 'info');
+				$('.info-empty').remove();
+				
+				$('#detil_nya_{$mod}').html('');
+				$('#grid_nya_{$mod}').show();
+				$('#detilnya_nya_{$mod}').hide();
+				$('#grid_{$mod}').datagrid('reload');
+			}else{
+				console.log(r);
+				$.messager.alert('PGN Solution', "Failed Save", 'error');
+			}
+			
+		});
+		return false;
+	});
+	
+</script>

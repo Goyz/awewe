@@ -1,0 +1,8 @@
+{foreach from=$data_unit_kerja item=rows}
+<div class="infobox infobox-red  ">
+	<div class="infobox-data">
+		<span class="infobox-data-number" id='jumlahnyabor'>{$rows.jumlah}</span>
+		<div class="infobox-content">{$rows.nama_unit}</div>
+	</div>
+</div>
+{/foreach}

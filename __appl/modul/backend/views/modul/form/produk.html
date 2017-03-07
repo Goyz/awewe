@@ -1,0 +1,73 @@
+<fieldset>
+	<div style="width:100%">
+		<form id="form_{$acak}" method="post" url="{$host}Backoffice-simpan/tbl_produk/{$sts}" enctype="multipart/form-data" >
+		<input type="hidden" id="editStatus_{$acak}" name="editstatus" value="{$sts}">
+		<input type="hidden" id="id_{$acak}" name="id" value="{$data.id|default:''}">
+		
+		<table class="table table-hover">
+			<tr>
+				<td>&nbsp;</td><td >Kategori</td><td>:</td>
+				<td style="font-weight:bold;">
+					<select name="cl_kategori_id" id="cl_kategori_id_{$acak}">
+						<option value="">-- Pilih -- </option>
+						{foreach from=$kat item=i}
+						<option value="{$i.id}" {if $sts eq 'edit'}{if $i.id eq $data.cl_kategori_id}selected{/if}{/if}>{$i.nama_kategori}</option>
+						{/foreach}
+					</select>
+					
+				</td>
+			</tr>
+			{include file="template/input_goyz.html" label="Nama Produk" style_type="width:80%" type="text" id="judul_produk{$acak}" name="judul_produk" class="validasi" value="{$data.judul_produk|default:''}"}
+			{include file="template/input_goyz.html" label="Keterangan" style_type="width:20%" type="editor" id="deskripsi_produk{$acak}" name="deskripsi_produk"  value="{$data.deskripsi_produk|default:''}"}
+			{include file="template/input_goyz.html" label="Berat" style_type="width:50px;;height:30px;" type="text_group" text_group='Kg' class="angka validasi" id="berat{$acak}" name="berat"  value="{$data.berat|default:''}"}
+			{include file="template/input_goyz.html" label="Dimensi" style_type="width:50px;" type="text" id="dimensi{$acak}" name="dimensi"  value="{$data.dimensi|default:''}"}
+			{include file="template/input_goyz.html" label="Harga" style_type="width:40%;height:30px;" type="text" id="harga{$acak}" name="harga" class="angka validasi"  value="{$data.harga|default:''}"}
+			{include file="template/input_goyz.html" label="Diskon (%)" style_type="width:50px;height:30px;" type="text_group" text_group='%' id="diskon{$acak}" name="diskon" class="angka"  value="{$data.diskon|default:''}"}
+			<tr>
+				<td>&nbsp;</td><td>Status</td><td>:</td>
+				<td style="font-weight:bold;">
+						<input name="flag" type="checkbox" value="F" {if $sts eq 'edit'}{if $data.flag|default:'' eq 'F'}checked{/if}{else}checked{/if} >&nbsp;&nbsp;<span class="lbl" >Aktif</span>
+					
+				</td>
+			</tr>
+		</table>
+		 <fieldset><legend>Gambar Produk</legend>
+			{include file="template/file_input.html" name="foto_produk" id="foto_produk" multiple='true'}
+			{if $sts eq 'edit'}
+				{if !empty($gambar)}
+				
+				<div class="row-fluid">
+				{foreach from=$gambar item=i}
+				  <div class="span2 gbr_{$i.id}">
+					<div class="thumbnail">
+					  <img src="{$host}__repository/produk/{$i.foto_produk}" alt="...">
+					  <div class="caption">
+						<center>{include file="template/button_save.html" click="kumpulAction('hapus_gambar',{$i.id})" text="Hapus" id_na="hapus_gambar" style_btn="btn-danger"  btn_goyz="true"}</center>
+					  </div>
+					</div>
+				  </div>
+				  
+				{/foreach}
+				</div>
+				{/if}
+			{/if}
+		 </fieldset>
+		</form>
+	</div>
+	<div style="width:100%">
+		<center>
+		{include file="template/button_save.html" text="Simpan Data" id_na="save" style_btn="btn-success"  btn_goyz="true"}
+		{include file="template/button_save.html" text="Batal Simpan" click="$('#grid_nya_{$mod}').show();$('#detil_nya_{$mod}').hide();" id_na="cancel" style_btn="btn-danger"  btn_goyz="true"}
+		</center>
+	</div>
+</fieldset>
+<script>
+	$(".validasi").validatebox({ required:true }); 
+	$(".angka").numberbox({    
+		min:0,
+		groupSeparator:',',
+		precision:2 }); 
+	$('#save_{$acak}').bind('click',function(){
+		simpan_form('form_{$acak}','cancel_{$acak}','Data Was Saved');
+	});
+</script>

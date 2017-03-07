@@ -1,0 +1,258 @@
+<div class="page-header position-relative">
+	<h1>
+		Mapping User LDAP 
+	</h1>
+</div>
+{if $sts eq 'add'}
+<div class="row-fluid">
+	<div class="span6" id="span_na_{$acak}">
+		<div id='tb_ldap_user' style="padding:5px;height:{$tinggi_toolbar|default:'35px'};">
+			<div style="float:{$align|default:'left'}; width:100%;">
+				<input type="text" name="key_{$acak}" id="key_{$acak}" style="width:30%;" placeholder="Cari Berdasarkan User">
+				<!--input type="text" name="group_{$acak}" id="group_{$acak}" style="width:30%;" placeholder="Cari Berdasarkan Group"-->
+				<select name="group_{$acak}" id="group_{$acak}" style="width:30%;" >
+					<option value="" selected>-- Pilih --</option>
+					<option value="Layanan Umum">Layanan Umum</option>
+					<option value="IT">IT</option>
+					<option value="HRD">HRD</option>
+					<option value="Finance">Finance</option>
+				</select>
+				&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0)" style='margin-top:-10px' class="l-btn l-btn-small l-btn-plain" group="" id="carina_{$acak}" >
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Find</span><span class="l-btn-icon icon-search">&nbsp;</span>
+					</span>
+				</a>	
+			</div>
+		</div>
+		<div id="grid_ldap_{$acak}"></div>
+	</div>
+	<div class="span5">
+		<form id="Form_{$acak}" url="{$host}backoffice-simpan/tbl_ldap_group" enctype="multipart/form-data" method="post">
+		<input type="hidden" name="user_ldap" id="user_ldap_{$acak}">
+		<input type="hidden" name="flag" id="flag" value='P'>
+		<input type='hidden' name="editstatus" value="{$sts|default:'add'}" />
+		<!--div class="span12">
+			<div class="well">
+				<label>User</label> : <span id="user_na"></span><br>
+				<label>Nama</label> : <span id="nama_na"></span>
+				
+			</div>
+		</div-->
+		<!--div class="span12" -->
+			<div class="span12">
+				<div class="well">
+					<div class="control-group">
+						<label class="control-label" style="width:450px;">Group User : </label>
+						{foreach from=$group item=i name=x}
+						<div class="controls">
+							<label>
+								<input name="cl_group_user_id"  id="cl_group_user_id_{$acak}" type="radio" value="{$i.id}" class="validasi cek group" checked />
+								<span class="lbl" style="margin-left:6px;">{$i.group_user|default:'-'}</span>
+							</label>
+						</div>
+						{/foreach}
+					</div>
+				</div>
+			</div>
+			<div class="span12">
+				<div class="well">
+					<div class="control-group">
+						<label class="control-label" style="width:450px;">Unit Kerja : </label>
+						{foreach from=$unit item=i name=x}
+						<div class="controls">
+							<label>
+								<input name="cl_unit_kerja_id" id="cl_unit_kerja_id_{$acak}" type="radio" value="{$i.id}" class="validasi cek unit" checked />
+								<span class="lbl" style="margin-left:6px;">{$i.nama_unit|default:'-'}</span>
+							</label>
+						</div>
+						{/foreach}
+					</div>
+				</div>
+			</div>
+		<!--/div-->
+		</form>
+	</div>
+</div>
+{else}
+<div class="row-fluid">
+<div class="span11">
+	<form id="Form_{$acak}" url="{$host}backoffice-simpan/tbl_ldap_group" enctype="multipart/form-data" method="post">
+	<input type="hidden" name="id" id="id_na" value="{$data.id}">
+	<input type='hidden' name="editstatus" value="{$sts|default:'add'}" />
+	<div class="span12">
+		<div class="well">
+			<label>User</label> : {$data.user_ldap}<br>
+		</div>
+	</div>
+	<div class="span12" >
+		<div class="span6">
+			<div class="well">
+				<div class="control-group">
+					<label class="control-label" style="width:450px;">Group User : </label>
+					{foreach from=$group item=i name=x}
+					<div class="controls">
+						<label>
+							<input name="cl_group_user_id" type="radio" value="{$i.id}" {if $data.cl_group_user_id eq $i.id}checked{/if} class="group"/>
+							<span class="lbl" style="margin-left:6px;">{$i.group_user|default:'-'}</span>
+						</label>
+					</div>
+					{/foreach}
+				</div>
+			</div>
+		</div>
+		<div class="span6">
+			<div class="well">
+				<div class="control-group">
+					<label class="control-label" style="width:450px;">Unit Kerja : </label>
+					{foreach from=$unit item=i name=x}
+					<div class="controls">
+						<label>
+							<input name="cl_unit_kerja_id" type="radio" value="{$i.id}" {if $data.cl_unit_kerja_id eq $i.id}checked{/if} class="unit" />
+							<span class="lbl" style="margin-left:6px;">{$i.nama_unit|default:'-'}</span>
+						</label>
+					</div>
+					{/foreach}
+				</div>
+			</div>
+		</div>
+	</div>
+	</form>
+</div>
+</div>
+{/if}
+<div class="form-actions" style="margin-top:-15px;">
+	<a class="btn btn-info" href='javascript:void(0);' id='simpanMngFile'>
+		Simpan
+	</a>
+	&nbsp; &nbsp; &nbsp;
+	<a class="btn btn-danger" href='javascript:void(0);' id='cancelMngFile'>
+		Kembali
+	</a>
+</div>
+
+<script>
+	{if $sts eq 'add'}
+		$('#span_na_{$acak}').css('height', (getClientHeight()-277));
+		//genGrid('ldap_user','grid_ldap_{$acak}', '', '');
+		var grid_ldap=$("#grid_ldap_{$acak}").datagrid({
+			title:'',
+			
+			rownumbers:false,
+			iconCls:'database',
+			fit:true,
+			striped:true,
+			pagination:false,
+			remoteSort: false,
+			showFooter:false,
+			singleSelect:false,
+			url: host+'backoffice-Data/ldap_user',		
+			nowrap: false,
+			pageSize:10,
+			pageList:[10,20,30,40,50,75,100,200],
+			queryParams:{ },
+			
+			columns:[[
+				{ field:'ck',checkbox:true,halign:'center',align:'center' },
+				{ field:'samaccountname',title:'LDAP User',width:180, halign:'center',align:'left',
+					formatter:function(value,rowData,rowIndex){
+						if(value){ return value; }
+						else return rowData.cn;
+					}
+				},							
+				{ field:'displayname',title:'Nama',width:260, halign:'center',align:'left' }
+			]],
+			
+			onClickRow:function(rowIndex,rowData){
+				//if(modnya=='ldap_user'){
+					/*$('#user_ldap').val(rowData.samaccountname);
+					$('#user_na').html(rowData.samaccountname);
+					$('#nama_na').html(rowData.displayname);
+					*/
+				//}
+			},
+			
+			toolbar: '#tb_ldap_user',
+			
+			onLoadSuccess: function(data){
+				if(data.total == 0){
+					var $panel = $(this).datagrid('getPanel');
+					var $info = '<div class="info-empty" style="margin-top:20%;">Data Tidak Tersedia</div>';
+					$($panel).find(".datagrid-view").append($info);
+				}else{
+					$($panel).find(".datagrid-view").append('');
+				}
+			},
+		});
+		$('#carina_{$acak}').bind('click',function(){
+			var post_search = {};
+			post_search['group'] = $('#group_{$acak}').val();
+			post_search['key'] = $('#key_{$acak}').val();
+			if($('#group_{$acak}').val()!='' || $('#key_{$acak}').val()!=''){
+				$("#grid_ldap_{$acak}").datagrid('reload',post_search);
+			}else{
+				$.messager.alert('Aldeaz Back-Office',"Isi User Atau Group ",'error');
+			}
+		});
+	{/if}
+	$('#cancelMngFile').on('click', function(){
+		$('#detil_nya_{$mod}').html('');
+		$('#grid_nya_{$mod}').show();
+		$('#detilnya_nya_{$mod}').hide();
+	});
+	$('#simpanMngFile').on('click', function(){
+		var post_na={};
+			post_na['cl_group_user_id']=$('.group:checked').val();
+			post_na['cl_unit_kerja_id']=$('.unit:checked').val();
+			{if $sts eq 'add'}
+			var data=grid_ldap.datagrid('getSelections');
+			if(data.length > 0){
+				post_na['user']=data;
+			}else{
+				$.messager.alert('PGN Solution', "Pilih User yang akan di mapping", 'error');
+				return false;
+			}
+			post_na['editstatus']='add';
+			{else}
+			post_na['editstatus']='edit';
+			post_na['id']={$data.id};
+			{/if}
+			
+				$.messager.progress();
+				$.post(host+"backoffice-simpan/tbl_ldap_group",post_na,function(r){
+					//console.log(r);
+					if(r == 1){
+						$.messager.progress('close');
+						$.messager.alert('PGN Solution', "Data Tersimpan", 'info');
+						$('.info-empty').remove();
+						$('#detil_nya_{$mod}').html('');
+						$('#grid_nya_{$mod}').show();
+						$('#detilnya_nya_{$mod}').hide();
+						$('#grid_{$mod}').datagrid('reload');
+					}else{
+						console.log(r);
+						$.messager.progress('close');
+						$.messager.alert('PGN Solution', "Failed Save", 'error');
+					}
+				});
+			
+			/*submit_form('Form_{$acak}',function(r){
+				if(r == 1){
+					$.messager.alert('PGN Solution', "Data Tersimpan", 'info');
+					$('.info-empty').remove();
+					$('#detil_nya_{$mod}').html('');
+					$('#grid_nya_{$mod}').show();
+					$('#detilnya_nya_{$mod}').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else{
+					console.log(r);
+					$.messager.alert('PGN Solution', "Failed Save", 'error');
+				}
+				
+				
+			});*/
+			
+			
+		
+	});
+</script>

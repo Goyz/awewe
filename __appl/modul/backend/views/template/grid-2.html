@@ -1,0 +1,21 @@
+<style type="text/css">
+	.datagrid-row-over td{
+		background:#D0E5F5;
+	}
+	.datagrid-row-selected td{
+		background:#FBEC88;
+		color:#000;
+	}
+</style>
+
+<div id='maingrid_{$main}' style="width:100% !important;">
+	<div id='grid_{$main}'></div>
+</div>
+<script>
+$(function(){
+	$('#maingrid_{$main}').css({
+		'height':({$height_grid|default:'getClientHeight()-200'})
+	});
+	genGrid('{$main}','grid_{$main}', '', '');
+});
+</script>

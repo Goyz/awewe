@@ -1,0 +1,176 @@
+<fieldset>
+	<div style="width:100%">
+		<form id="form_{$acak}" method="post" url="{$host}Backoffice-simpan/tbl_produk_option/{$sts}" enctype="multipart/form-data" >
+		<input type="hidden" id="editStatus_{$acak}" name="editstatus" value="add">
+		<input type="hidden" id="id_{$acak}" name="id" value="">
+		<input type="hidden" id="tbl_produk_id_{$acak}" name="tbl_produk_id" value="{$tbl_produk_id|default:''}">
+		
+		<table class="table table-hover">
+		<tr>
+			<td>&nbsp;</td><td >Ukuran</td><td>:</td>
+			<td style="font-weight:bold;">
+				<select name="cl_ukuran_id" id="cl_ukuran_id_{$acak}">
+					<option value="">-- Pilih -- </option>
+					{foreach from=$ukuran item=i}
+					<option value="{$i.id}" {if $sts eq 'edit'}{if $i.id eq $data.cl_ukuran_id}selected{/if}{/if}>{$i.ukuran}</option>
+					{/foreach}
+				</select>
+				
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td><td >Warna</td><td>:</td>
+			<td style="font-weight:bold;">
+				<select name="cl_warna_id" id="cl_warna_id_{$acak}">
+					<option value="">-- Pilih (Optional) -- </option>
+					{foreach from=$warna item=i}
+					<option value="{$i.id}" {if $sts eq 'edit'}{if $i.id eq $data.cl_warna_id}selected{/if}{/if}>{$i.warna}</option>
+					{/foreach}
+				</select>
+				
+			</td>
+		</tr>
+		{include file="template/input_goyz.html" label="Harga" style_type="width:40%;height:30px;" type="text" id="harga{$acak}" name="harga" class="angka validasi"  value="{$data.harga|default:''}"}
+		<tr>
+			<td>&nbsp;</td><td>Status</td><td>:</td>
+			<td style="font-weight:bold;">
+				<select name="flag" id="flag_{$acak}">
+					<option value="F">Aktif</option>
+					<option value="P">Tidak Aktif</option>
+				</select>
+			</td>
+		</tr>
+		</table>
+		</form>
+	</div>
+	<div style="width:100%">
+		<div id="grid_opt_{$acak}">
+		<table id="list_prd_opt_{$acak}"></table>
+		</div>
+	</div>
+	<div style="width:100%;margin-top:10px;">
+		<center>
+		{include file="template/button_save.html" text="Simpan Data" id_na="save" style_btn="btn-success"  btn_goyz="true"}
+		{include file="template/button_save.html" text="Clear Form" id_na="clear" style_btn="btn-warning"  btn_goyz="true"}
+		{include file="template/button_save.html" text="Hapus Data" id_na="hapus" style_btn="btn-danger"  btn_goyz="true"}
+		{include file="template/button_save.html" text="Kembali" click="$('#grid_nya_produk').show();$('#detil_nya_produk').hide();" id_na="cancel" style_btn="btn-info"  btn_goyz="true"}
+		</center>
+	</div>
+</fieldset>
+
+<script>
+	$(function(){	
+		$('#grid_opt_{$acak}').css({
+			'height':( {$height_grid|default:'getClientHeight()-410'} )
+		});
+		$(".validasi").validatebox({ required:true }); 
+		$(".angka").numberbox({    
+			min:0,
+			groupSeparator:',',
+			precision:2 
+		}); 
+	});
+	var grid_opt=$("#list_prd_opt_{$acak}").datagrid({
+		title:'Produk Option List (Editing Pilih Salah Satu Row Data)',
+		rownumbers:true,
+		iconCls:'database',
+		fit:true,
+		striped:true,
+		pagination:false,
+		remoteSort: false,
+		singleSelect:true,
+		url:host+'Backoffice-Data/tbl_produk_option',		
+		nowrap: true,
+		pageSize:10,
+		pageList:[10,20,30,40,50,75,100,200],
+		queryParams:{
+			tbl_produk_id:{$tbl_produk_id}
+		},
+		
+		columns:[
+			[
+				{ field:'flag',title:'Status',width:120, halign:'center',align:'left',
+					formatter:function(value,rowData,rowIndex){
+						if(value=='F'){ return 'Aktif'; }
+						else{ return 'Tidak Aktif'; }
+					},
+					styler:function(value,rowData,rowIndex){
+						if(value=='P'){ return 'background-color:red;color:#FFFFFF'; }
+						else return 'background-color:green;color:#FFFFFF';
+					}
+				},				
+				{ field:'ukuran',title:'Ukuran',width:200, halign:'center',align:'left',
+					formatter:function(value,rowData,rowIndex){
+						return value+' ( '+rowData.deskripsi+' )';
+					}
+				},				
+				{ field:'warna',title:'Warna',width:200, halign:'center',align:'left' },	
+				{ field:'harga',title:'Harga',width:150, halign:'center',align:'right',
+					formatter:function(value,rowData,rowIndex){
+						return NumberFormat(value);
+					}
+				},	
+			]
+		],
+		
+		onClickRow:function(rowIndex,rowData){
+			$('#editStatus_{$acak}').val('edit');
+			$('#id_{$acak}').val(rowData.id);
+			$('#cl_ukuran_id_{$acak}').val(rowData.cl_ukuran_id);
+			$('#cl_warna_id_{$acak}').val(rowData.cl_warna_id);
+			if(rowData.flag=='F')$('#flag_{$acak}').val(rowData.flag).change();
+			else $('#flag_{$acak}').val('P').change();
+			$('#harga{$acak}').numberbox('setValue',rowData.harga);
+		},
+	});
+	$('#save_{$acak}').bind('click',function(){
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				console.log(r)
+				if(r==1){
+					$.messager.alert('Back-Office','Data Produk Option Tersimpan','info');
+					grid_opt.datagrid('reload');
+					$('#clear_{$acak}').trigger('click');
+				}else{
+					console.log(r);
+					$.messager.alert('Back-Office',"Tidak Dapat Menyimpan Data " + r,'error');
+				}
+			});
+		}else{
+			$.messager.alert('Homtel Back-Office',"Isi Data Yang Kosong ",'info');
+		}
+	});
+	$('#clear_{$acak}').bind('click',function(){
+		clear_form('form_{$acak}');
+		$('#editStatus_{$acak}').val('add');
+		$('#id{$acak}').val('');
+		$('#flag_{$acak}').val('F').change();
+	});
+	$('#hapus_{$acak}').bind('click',function(){
+		var row = grid_opt.datagrid('getSelected');
+		if(row){
+			$.messager.confirm('Back - Office','Anda Yakin Ingin Menghapus Data Ini ?',function(re){
+			if(re){
+				loadingna();
+				$.post(host+'Backoffice-simpan/tbl_produk_option/del', { 'id':row.id, 'editstatus':'delete' }, function(r){
+					if(r==1){
+						winLoadingClose();
+						$.messager.alert('Back - Office',"Data Terhapus",'info');
+						grid_opt.datagrid('reload');
+						$('#clear_{$acak}').trigger('click');
+					}else{
+						winLoadingClose();
+						console.log(r)
+						$.messager.alert('Back - Office',"Gagal Menghapus Data "+r,'error');
+					}
+				});	
+			}
+			
+			});
+		}else{
+			$.messager.alert('Back-Office','Pilih Data YAng Akan Dihapus','warning');
+		}
+	});
+</script>
+
+		

@@ -1,0 +1,6 @@
+{assign var=buttonnya value='true'}
+{if $auth.cl_user_group_id neq '3'}
+	{assign var=buttonnya value='false'}
+{/if}
+
+{include file="backend/template/grid.html" main="upload_file" button={$buttonnya} button_request_delete="true" table='tbl_upload_file' height_grid="(getClientHeight()-155)" filter_core="true"}

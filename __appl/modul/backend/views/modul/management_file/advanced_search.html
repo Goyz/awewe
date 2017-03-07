@@ -1,0 +1,43 @@
+<div style='margin-bottom:5px;margin-top:5px;margin-left:5px;'>
+	<label style='width:100px;'>No. Dokumen</label>
+	<input type="text" id="no_dok_{$acak}" style="width:100px;">
+	&nbsp;&nbsp;&nbsp;
+	<label style='width:100px;'>Jenis Dokumen</label>
+	<select id='jns_dok_{$acak}' style="width:150px;">{$jenis_dokumen}</select>
+	&nbsp;&nbsp;&nbsp;
+	<label style='width:100px;'>Tanggal Arsip</label>
+	<input type="text" id="tgl_arsip_{$acak}" style="width:100px;">	
+	<br/>
+	<label style='width:100px;'>Perihal</label>
+	<input type="text" id="perihal_{$acak}" style="width:370px;">
+	&nbsp;&nbsp;&nbsp;
+	<label style='width:100px;'>Pengirim</label>
+	<select id='pengirim_{$acak}' style="width:115px;">{$pengirim}</select>
+	
+	&nbsp;&nbsp;&nbsp;
+	<a href="javascript:void(0)" style='margin-top:-10px' id='search_adv' class="l-btn l-btn-small l-btn-plain" group="" onClick="advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}');">
+		<span class="l-btn-left l-btn-icon-left">
+			<span class="l-btn-text">Find</span><span class="l-btn-icon icon-search">&nbsp;</span>
+		</span>
+	</a>	
+	&nbsp;&nbsp;&nbsp;
+	<a href="javascript:void(0)" style='margin-top:-10px' class="l-btn l-btn-small l-btn-plain" group="" onClick="advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}', 'balikin');">
+		<span class="l-btn-left l-btn-icon-left">
+			<span class="l-btn-text">Refresh All</span><span class="l-btn-icon icon-reload">&nbsp;</span>
+		</span>
+	</a>	
+</div>	
+{include file="backend/template/grid-2.html" main="advanced_search" table='tbl_upload_file' height_grid="(getClientHeight()-246)"}
+
+<script>
+	$('#tgl_arsip_{$acak}').datepicker({
+		format: 'yyyy-mm-dd',
+	});
+
+	$(document).keypress(function(e) {
+		if(e.which == 13) {
+			//advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}');
+			$('#search_adv').trigger('click');
+		}
+	});
+</script>

@@ -1,0 +1,31 @@
+<fieldset>
+	<div style="width:100%">
+		<form id="form_{$acak}" method="post" url="{$host}Backoffice-simpan/tbl_slider/{$sts}" enctype="multipart/form-data" >
+		<input type="hidden" id="editStatus_{$acak}" name="editstatus" value="{$sts}">
+		<input type="hidden" id="id_{$acak}" name="id" value="{$data.id|default:''}">
+		
+		<table class="table table-hover">
+			{include file="template/input_goyz.html" label="Judul" style_type="width:80%" type="text" id="judul{$acak}" name="judul" class="validasi" value="{$data.judul|default:''}"}
+			{include file="template/input_goyz.html" label="Keterangan" style_type="width:20%" type="editor" id="deskripsi{$acak}" name="deskripsi"  value="{$data.deskripsi|default:''}"}
+			{include file="template/input_goyz.html" label="File Gambar (939 x 349)" style_type="width:20%" type="file" id="gambar{$acak}" name="gambar"  value="{$data.gambar|default:''}"}
+			<tr>
+				<td>&nbsp;</td><td>Status</td><td>:</td>
+				<td style="font-weight:bold;">
+						<input name="flag" type="checkbox" value="F" {if $sts eq 'edit'}{if $data.flag|default:'' eq 'F'}checked{/if}{else}checked{/if} >&nbsp;&nbsp;<span class="lbl" >Aktif</span>
+					</div>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+	<div style="width:100%">
+		{include file="template/button_save.html" text="Simpan Data" id_na="save" style_btn="btn-success"  btn_goyz="true"}
+		{include file="template/button_save.html" text="Batal Simpan" click="$('#grid_nya_{$mod}').show();$('#detil_nya_{$mod}').hide();" id_na="cancel" style_btn="btn-danger"  btn_goyz="true"}
+	</div>
+</fieldset>
+<script>
+	$(".validasi").validatebox({ required:true }); 
+	$('#save_{$acak}').bind('click',function(){
+		simpan_form('form_{$acak}','cancel_{$acak}','Data Was Saved');
+	});
+</script>

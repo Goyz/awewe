@@ -1,0 +1,121 @@
+<div class="page-header position-relative">
+	<h1>
+		USER MANAGEMENT
+	</h1>
+</div>
+<div class="row-fluid">
+	<div class="span12">
+		<form class="form-horizontal" id='Form_{$acak}' name='frmMngFile' url="{$host}backoffice-simpan/tbl_user" enctype="multipart/form-data" method="post">
+			<input type='hidden' name="editstatus" value="{$sts}" />
+			<input type='hidden' name="status" value="1" />
+			<input type='hidden' name="id" value="{$data.id|default:''}" />
+			{if $sts eq add}
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">User Name</label>
+				<div class="controls">
+					<input  id="nama_user" name="nama_user" value="{$data.nama_user|default:''}" class="span6 validasi" type="text" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Password</label>
+				<div class="controls">
+					<input  id="password" name="password" value="{$data.password|default:''}" class="span6 validasi" type="password" />
+				</div>
+			</div>
+			{else}
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">User Name</label>
+				<div class="controls">
+					<input  id="nama_user" name="nama_user" value="{$data.nama_user|default:''}" class="span6 validasi" type="text" disabled="disabled"/>
+				</div>
+			</div>
+			{/if}
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Nama Lengkap</label>
+				<div class="controls">
+					<input  id="nama_lengkap" name="nama_lengkap" value="{$data.nama_lengkap|default:''}" class="span6 validasi" type="text" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Email</label>
+				<div class="controls">
+					<input  id="email" name="email" value="{$data.email|default:''}" class="span6 validasi" type="text" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Group User</label>
+				<div class="controls">
+					<select name='cl_user_group_id' class='validasi' id='cl_user_group_id'  >
+						<option value="">-- PILIH GROUP --</option>
+						{foreach from=$group item=i}
+						<option value="{$i.id}" {if $data.cl_user_group_id|default:'' eq $i.id}selected{/if}>{$i.group_user}</option>
+						{/foreach}
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Nama Unit</label>
+				<div class="controls">
+					<select name='cl_unit_kerja_id' class='validasi' id='cl_unit_kerja_id'  >
+						<option value="">-- PILIH UNIT --</option>
+						{foreach from=$unit item=i}
+						<option value="{$i.id}" {if $data.cl_unit_kerja_id|default:'' eq $i.id}selected{/if}>{$i.nama_unit}</option>
+						{/foreach}
+					</select>
+				</div>
+			</div>
+		</form>
+		<div class="form-actions">
+			<a class="btn btn-info" href='javascript:void(0);' id='simpanMngFile'>
+				Simpan
+			</a>
+			&nbsp; &nbsp; &nbsp;
+			<a class="btn btn-danger" href='javascript:void(0);' id='cancelMngFile'>
+				Kembali
+			</a>
+		</div>
+	</div>
+</div>
+<script>
+	
+	$(".validasi").validatebox({ required:true }); 		
+	$('#existing_file').on('click', function(){
+		//alert($(this).attr('data'));
+		pdffile_url = $(this).attr('data');
+		html = '<iframe src="'+pdffile_url+'" frameborder="0" class="span12" scrolling="no" width="100%" height="600"></iframe>';
+		$('#preview_file').html(html);
+	});
+	$('#filename').on('change', function(){
+		pdffile=document.getElementById("filename").files[0];
+        pdffile_url=URL.createObjectURL(pdffile);
+        html = '<iframe src="'+pdffile_url+'" frameborder="0" class="span12" scrolling="no" width="100%" height="600"></iframe>';
+		$('#preview_file').html(html);
+	});
+	$('#cancelMngFile').on('click', function(){
+		$('#detil_nya_{$mod}').html('');
+		$('#grid_nya_{$mod}').show();
+		$('#detilnya_nya_{$mod}').hide();
+	});
+	$('#simpanMngFile').on('click', function(){
+		validasi = $('#Form_{$acak}').form('validate');
+		submit_form('Form_{$acak}',function(r){
+			if(r == 1){
+				$.messager.alert('PGN Solution', "Data Tersimpan", 'info');
+				$('.info-empty').remove();
+				
+				$('#detil_nya_{$mod}').html('');
+				$('#grid_nya_{$mod}').show();
+				$('#detilnya_nya_{$mod}').hide();
+				$('#grid_{$mod}').datagrid('reload');
+			}else if(r==2){
+				$.messager.alert('PGN Solution', "USER "+$('#nama_user').val()+" SUDAH TERDAFTAR", 'warning');
+			}else{
+				console.log(r);
+				$.messager.alert('PGN Solution', "Failed Save", 'error');
+			}
+			
+		});
+		return false;
+	});
+	
+</script>
