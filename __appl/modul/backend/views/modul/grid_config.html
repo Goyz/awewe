@@ -4,6 +4,8 @@
 		{assign var=buttonnya value='false'}
 	{/if}
 {else if $mod eq 'log'}{assign var=buttonnya value='false'}
+{else if $mod eq 'kontent'}{assign var=button_add value='false'}{assign var=button_delete value='false'}
+
 {/if}
 
-{include file="template/grid.html" main={$mod} button={$buttonnya} button_delete="true" table={$table|default:''} filter_core="true"}
+{include file="template/grid.html" main={$mod} button={$buttonnya} table={$table|default:''} filter_core="true"}

@@ -43,6 +43,15 @@ class Mbackend extends CI_Model{
 				$sql="SELECT A.*
 					  FROM cl_kategori A ".$where;
 			break;
+			case "tbl_konten":
+				if($balikan=='row_array'){
+					$where .=" AND A.id=".$this->input->post('id');
+				}
+				$sql="SELECT A.*,B.menu
+					  FROM tbl_konten A  
+					  LEFT JOIN cl_menu B ON A.cl_menu_id=B.id 
+					  ".$where;
+			break;
 			case "cl_ukuran":
 				if($balikan=='row_array'){
 					$where .=" AND A.id=".$this->input->post('id');
@@ -146,9 +155,30 @@ class Mbackend extends CI_Model{
 			$id = $data['id'];
 			unset($data['id']);
 		}
-		
-		//print_r($_FILES);exit;
 		switch($table){
+			case "tbl_profile":
+				//print_r($data);exit;
+				foreach($data as $v=>$x){
+					$sql="UPDATE tbl_profile set value='".$x."' WHERE param='".$v."'";
+					$this->db->query($sql);
+				}
+				if(isset($_FILES['logo'])){
+					if($_FILES['logo']['name']!=""){
+						$name=date('YmdHis');
+						$logo=$this->lib->uploadnong('__repository/logo/', 'logo', $name);
+						$sql="UPDATE tbl_profile set value='".$logo."' WHERE param='logo'";
+						$this->db->query($sql);
+					}
+				}
+				if($this->db->trans_status() == false){
+					$this->db->trans_rollback();
+					return 0;
+				}else{
+					return $this->db->trans_commit();
+				}
+				
+				
+			break;
 			case "tbl_slider":
 				$data['create_date']=date('Y-m-d H:i:s');
 				$data['create_by']=$this->auth['username'];
@@ -158,9 +188,6 @@ class Mbackend extends CI_Model{
 						$data['gambar']=$this->lib->uploadnong('__repository/banner/', 'gambar', $name);
 					}
 				}
-				
-				
-				
 			break;
 			case "cl_kelas":
 			case "cl_edisi":
@@ -277,5 +304,19 @@ class Mbackend extends CI_Model{
 		}
 	
 	}
-	
+	function hapus_logo($data){
+		$this->db->trans_begin();
+		chmod('__repository/logo/'.$data['value'],0777);
+		unlink('__repository/logo/'.$data['value']);
+		
+		$sql="UPDATE tbl_profile SET value=NULL WHERE param='".$data['param']."'";
+		$this->db->query($sql);
+		
+		if($this->db->trans_status() == false){
+			$this->db->trans_rollback();
+			return 0;
+		}else{
+			return $this->db->trans_commit();
+		}
+	}
 }

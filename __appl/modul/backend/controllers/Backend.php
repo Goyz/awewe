@@ -43,6 +43,9 @@ class Backend extends JINGGA_Controller {
 				$opt .="<option value='A.judul'>Judul</option>";
 				$opt .="<option value='A.deskripsi'>Keterangan</option>";
 			break;
+			case "kontent":
+				$opt .="<option value='B.menu'>Judul</option>";
+			break;
 			case "produk":
 				$opt .="<option value='A.judul_produk'>Nama Produk</option>";
 				$opt .="<option value='A.deskripsi_produk'>Keterangan</option>";
@@ -60,9 +63,21 @@ class Backend extends JINGGA_Controller {
 			$this->nsmarty->assign('sts',$sts);
 			switch($mod){
 				
+				case "profile":
+					//if($sts=='edit'){
+						$data=$this->mbackend->getdata('tbl_profile','result_array');
+						$this->nsmarty->assign('data',$data);
+					//}
+				break;
 				case "slider":
 					if($sts=='edit'){
 						$data=$this->mbackend->getdata('tbl_slider','row_array');
+						$this->nsmarty->assign('data',$data);
+					}
+				break;
+				case "kontent":
+					if($sts=='edit'){
+						$data=$this->mbackend->getdata('tbl_konten','row_array');
 						$this->nsmarty->assign('data',$data);
 					}
 				break;
@@ -544,6 +559,11 @@ class Backend extends JINGGA_Controller {
 	
 	function test(){
 		echo $_SERVER["DOCUMENT_ROOT"];
+	}
+	function hapus_logo(){
+		$data=array('param'=>$this->input->post('param'),'value'=>$this->input->post('value'));
+		echo $this->mbackend->hapus_logo($data);
+		//echo $param.'->'.$val;
 	}
 	
 }

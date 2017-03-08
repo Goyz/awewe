@@ -28,3 +28,4 @@ $route['Backoffice-laporan/(:any)'] = 'backend/get_form/$1';
 $route['Backoffice-Pesan'] = 'backend/get_pesan';
 $route['Backoffice-Data/(:any)'] = 'backend/backend/getdata/$1';
 $route['Backoffice-HapusGambar'] = 'backend/backend/simpandata/tbl_foto_produk/delete';
+$route['Backoffice-HapusLogo'] = 'backend/backend/hapus_logo';
